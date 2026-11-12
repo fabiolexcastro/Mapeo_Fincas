@@ -19,5 +19,8 @@ tbls
 sola <- st_read('./data/SolyAgua_Shapefile/SolAgua_UM.shp')
 plot(st_geometry(sola))
 
+## Clean shapefile 
+sola <- dplyr::select(sola, ID1, ID2, Hacienda, Lote, UM, geometry)
+sola
 
 
