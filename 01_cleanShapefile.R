@@ -27,3 +27,8 @@ sola <- inner_join(sola, tbls$Datos_SolyAgua, by = c('Hacienda', 'Lote', 'UM'))
 ## To reclassify 
 rngs <- tbls$Rangos
 cols <- rngs[1,] |> as.vector() |> as.character()
+cols
+rngs <- rngs[-1,]
+colnames(rngs) <- cols
+rngs <- rngs[1:5,]
+rngs
