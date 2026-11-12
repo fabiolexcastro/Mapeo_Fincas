@@ -7,6 +7,17 @@ pacman::p_load(terra, tidyverse, hablar, readxl, sf, fs, glue, RColorBrewer, ggs
 g <- gc(reset = T)
 rm(list = ls())
 
+# Functions ---------------------------------------------------------------
+
+## Normalize names
+nrml.name <- function(text){
+  # text <- 'Raíces Vivas totales'
+  rsl <- text %>% stringi::stri_trans_general('Latin-ASCII') %>% str_squish() %>% str_replace_all(' ', '_') %>% tolower()
+  return(rsl)
+}
+
+
+
 # Table (main) ------------------------------------------------------------
 path <- './Bdatos_Automatizacion.xlsx'
 shts <- readxl::excel_sheets(path)
@@ -31,6 +42,6 @@ rngs <- rngs[-1,]
 colnames(rngs) <- cols
 rngs <- rngs[1:5,]
 colnames(rngs)[3] <- 'rgb'
+rngs <- dplyr::select(rngs, 1:15)
 
-rngs <- 
 
