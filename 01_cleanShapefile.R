@@ -12,6 +12,8 @@ rm(list = ls())
 path <- './Bdatos_Automatizacion.xlsx'
 shts <- readxl::excel_sheets(path)
 shts
+tbls <- map(.x = shts, .f = ~ readxl::read_excel(path = path, sheet = .x)) %>% set_names(shts)
+tbls
 
 # Sol y agua --------------------------------------------------------------
 sola <- st_read('./data/SolyAgua_Shapefile/SolAgua_UM.shp')
