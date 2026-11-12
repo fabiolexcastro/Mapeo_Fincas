@@ -2,10 +2,14 @@
 
 # Libraries ---------------------------------------------------------------
 library(pacman)
-pacman::p_load(terra, tidyverse, sf, fs, glue, RColorBrewer, ggspatial)
+pacman::p_load(terra, tidyverse, readxl, sf, fs, glue, RColorBrewer, ggspatial)
 
 g <- gc(reset = T)
 rm(list = ls())
+
+
+# Table (main) ------------------------------------------------------------
+path <- './Bdatos_Automatizacion.xlsx'
 
 
 # Sol y agua --------------------------------------------------------------
