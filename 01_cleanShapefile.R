@@ -16,32 +16,26 @@ nrml.name <- function(text){
   return(rsl)
 }
 
+## Ranges
+pars.rnge <- function(text){
+  # text <- c('< 2.3', '-150.0 - 100', '> 32.0', '70% - 80%')
+  txt <- str_remove_all(text, ' ')
+  pct <- str_detect(txt, '%')
+  txt <- str_remove_all(txt, '%')
+  mtc <- str_match(txt, '^(<|>)?(-?[0-9.]+)(?:-(-?[0-9.]+))?$')
+  if(any(is.na(mtc[, 1]))) stop(glue('Rango no interpretable: {paste(text[is.na(mtc[, 1])], collapse = " | ")}'))
+  opr <- mtc[, 2]
+  vl1 <- as.numeric(mtc[, 3])
+  vl2 <- as.numeric(mtc[, 4])
+  lwr <- case_when(opr %in% '<' ~ -Inf, T ~ vl1)
+  upr <- case_when(opr %in% '>' ~ Inf, opr %in% '<' ~ vl1, T ~ vl2)
+  fct <- ifelse(pct, 100, 1)
+  rsl <- tibble(lwr = lwr / fct, upr = upr / fct)
+  return(rsl)
+}
 
 
-# Table (main) ------------------------------------------------------------
-path <- './Bdatos_Automatizacion.xlsx'
-shts <- readxl::excel_sheets(path)
-shts
-tbls <- map(.x = shts, .f = ~ readxl::read_excel(path = path, sheet = .x)) %>% set_names(shts)
-tbls
 
-# Sol y agua --------------------------------------------------------------
-sola <- st_read('./data/SolyAgua_Shapefile/SolAgua_UM.shp')
-plot(st_geometry(sola))
 
-## Clean shapefile 
-sola <- dplyr::select(sola, ID1, ID2, Hacienda, Lote, UM, geometry)
-
-## Join shapefile and table
-sola <- inner_join(sola, tbls$Datos_SolyAgua, by = c('Hacienda', 'Lote', 'UM'))
-
-## To reclassify 
-rngs <- tbls$Rangos
-cols <- rngs[1,] |> as.vector() |> as.character()
-rngs <- rngs[-1,]
-colnames(rngs) <- cols
-rngs <- rngs[1:5,]
-colnames(rngs)[3] <- 'rgb'
-rngs <- dplyr::select(rngs, 1:15)
 
 
