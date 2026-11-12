@@ -10,7 +10,8 @@ rm(list = ls())
 
 # Table (main) ------------------------------------------------------------
 path <- './Bdatos_Automatizacion.xlsx'
-
+shts <- readxl::excel_sheets(path)
+shts
 
 # Sol y agua --------------------------------------------------------------
 sola <- st_read('./data/SolyAgua_Shapefile/SolAgua_UM.shp')
