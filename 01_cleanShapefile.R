@@ -2,7 +2,7 @@
 
 # Libraries ---------------------------------------------------------------
 library(pacman)
-pacman::p_load(terra, tidyverse, readxl, sf, fs, glue, RColorBrewer, ggspatial)
+pacman::p_load(terra, tidyverse, hablar, readxl, sf, fs, glue, RColorBrewer, ggspatial)
 
 g <- gc(reset = T)
 rm(list = ls())
@@ -27,8 +27,10 @@ sola <- inner_join(sola, tbls$Datos_SolyAgua, by = c('Hacienda', 'Lote', 'UM'))
 ## To reclassify 
 rngs <- tbls$Rangos
 cols <- rngs[1,] |> as.vector() |> as.character()
-cols
 rngs <- rngs[-1,]
 colnames(rngs) <- cols
 rngs <- rngs[1:5,]
-rngs
+colnames(rngs)[3] <- 'rgb'
+
+rngs <- 
+
