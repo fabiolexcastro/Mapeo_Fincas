@@ -18,6 +18,7 @@ nrml.name <- function(text){
 
 ## Ranges
 pars.rnge <- function(text){
+  
   # text <- c('< 2.3', '-150.0 - 100', '> 32.0', '70% - 80%')
   txt <- str_remove_all(text, ' ')
   pct <- str_detect(txt, '%')
@@ -32,9 +33,21 @@ pars.rnge <- function(text){
   fct <- ifelse(pct, 100, 1)
   rsl <- tibble(lwr = lwr / fct, upr = upr / fct)
   return(rsl)
+
 }
 
+# Read the blocks [ranges] ------------------------------------------------
+read.rnge <- function(path){
+  # path <- './Bdatos_Automatizacion.xlsx'
+  cat('Reading ranges\n')
+  mtx <- readxl::read_excel(path, sheet = 'Rangos', col_names = F, col_types = 'text', .name_repair = 'minimal') %>% as.matrix()
+  mtx[] <- str_squish(mtx)
+  nmx <- mtx
+  nmx[] <- nrml.name(mtx)
+  hdr <- which(nmx == 'categorias', arr.ind = T)
+  
 
+}
 
 
 
