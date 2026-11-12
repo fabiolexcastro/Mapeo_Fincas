@@ -23,4 +23,5 @@ plot(st_geometry(sola))
 sola <- dplyr::select(sola, ID1, ID2, Hacienda, Lote, UM, geometry)
 sola
 
-
+## Join shapefile and table
+sola <- inner_join(sola, tbls$Datos_SolyAgua, by = c('Hacienda', 'Lote', 'UM'))
