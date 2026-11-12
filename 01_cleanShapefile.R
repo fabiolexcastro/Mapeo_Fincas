@@ -7,7 +7,6 @@ pacman::p_load(terra, tidyverse, readxl, sf, fs, glue, RColorBrewer, ggspatial)
 g <- gc(reset = T)
 rm(list = ls())
 
-
 # Table (main) ------------------------------------------------------------
 path <- './Bdatos_Automatizacion.xlsx'
 shts <- readxl::excel_sheets(path)
@@ -21,7 +20,10 @@ plot(st_geometry(sola))
 
 ## Clean shapefile 
 sola <- dplyr::select(sola, ID1, ID2, Hacienda, Lote, UM, geometry)
-sola
 
 ## Join shapefile and table
 sola <- inner_join(sola, tbls$Datos_SolyAgua, by = c('Hacienda', 'Lote', 'UM'))
+
+## To reclassify 
+rngs <- tbls$Rangos
+cols <- rngs[1,] |> as.vector() |> as.character()
