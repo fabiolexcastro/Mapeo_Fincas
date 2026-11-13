@@ -162,6 +162,10 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   cat('Reclasificada: ', paste(vrs, collapse = ', '), '\n')
   cat('Not reclasificada (sin rango): ', paste(out, collapse = ', '), '\n')
   
+  for(v in vrs){
+    shp[[glue('{v}_rcl')]] <- rcls.vctr(vctr = shp[[v]], tble = filter(rnge, keyy == nrml.name(v)))
+  }
+  
   
   
 }
