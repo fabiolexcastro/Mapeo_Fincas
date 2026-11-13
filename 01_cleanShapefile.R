@@ -150,5 +150,7 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   if(nrow(nsh) > 0){cat('Polygons without lab data:\n'); print(nsh)}
   if(nrow(ntb) > 0){cat('Lab rows without polygon:\n'); print(dplyr::select(ntb, all_of(keys)))}
   
-   
+  ### Join (all polygons are kept; without data -> NA)
+  shp <- left_join(shp, tbl, by = keys)
+  
 }
