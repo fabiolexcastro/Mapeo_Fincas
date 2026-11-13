@@ -12,7 +12,6 @@ path <- './Bdatos_Automatizacion.xlsx'
 dout <- './output'
 fs::dir_create(dout)
 
-
 # Functions ---------------------------------------------------------------
 
 ## Normalize names
@@ -89,6 +88,9 @@ read.rnge <- function(path){
   return(rsl)
   
 }
+rnge <- read.rnge(path = path)
+rnge
+
 
 ## Reclassify a numeric vector with the ranges of one variable -----------
 rcls.vctr <- function(vctr, tble){
