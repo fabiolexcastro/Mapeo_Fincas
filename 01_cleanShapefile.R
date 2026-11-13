@@ -63,6 +63,17 @@ read.rnge <- function(path){
     })
   })
   
+  ## Key to match the columns of the data tables
+  rsl <- rsl %>%
+    mutate(rot = str_detect(nrml.name(vrbl), '^raices|^radopholus'),
+           keyy = case_when(fol ~ vrbl, rot ~ vrbl, T ~ paste0(vrbl, '_sue')),
+           keyy = nrml.name(keyy)) %>%
+    bind_cols(., pars.rnge(.$rnge)) %>%
+    dplyr::select(-fol, -rot)
+  
+  ## Check: the upper limit of one class must be the lower limit of the next one
+  
+  
 }
 
 
