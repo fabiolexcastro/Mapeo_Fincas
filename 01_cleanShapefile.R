@@ -170,7 +170,11 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   ord <- c(keys, unlist(map(vrs, ~ c(.x, glue('{.x}_rcl')))), out)
   shp <- dplyr::select(shp, any_of(kpcl), all_of(ord))
   
-  
+  ### Values outside every range (NA in _rcl but not in the original)
+  nas <- map_dfr(vrs, function(v){
+    tibble(vrbl = v, n_na = sum(!is.na(shp[[v]]) & is.na(shp[[glue('{v}_rcl')]])))
+  }) %>% filter(n_na > 0)
+  if(nrow(nas) > 0){cat('Values outside the ranges (NA):\n'); print(nas)}
   
   
 }
