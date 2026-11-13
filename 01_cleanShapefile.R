@@ -138,6 +138,10 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
     mutate(across(all_of(keys), ~ str_squish(as.character(.x))))
   tbl <- read.tble(path = path, shet = shet, keys = keys)
   
+  ### Check the join (both directions)
+  nsh <- anti_join(st_drop_geometry(shp), tbl, by = keys)
+  ntb <- anti_join(tbl, st_drop_geometry(shp), by = keys)
+  
   
    
 }
