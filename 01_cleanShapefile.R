@@ -136,7 +136,7 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
     sf::st_zm(drop = T) %>%
     dplyr::select(any_of(kpcl), all_of(keys)) %>%
     mutate(across(all_of(keys), ~ str_squish(as.character(.x))))
-  
+  tbl <- read.tble(path = path, shet = shet, keys = keys)
   
   
    
