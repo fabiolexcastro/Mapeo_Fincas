@@ -176,5 +176,7 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   }) %>% filter(n_na > 0)
   if(nrow(nas) > 0){cat('Values outside the ranges (NA):\n'); print(nas)}
   
+  ### Write: GeoPackage (full names) + Shapefile (short names) + names dictionary
+  sf::st_write(shp, glue('{dout}/{name}_rcl.gpkg'), append = F, quiet = T)
   
 }
