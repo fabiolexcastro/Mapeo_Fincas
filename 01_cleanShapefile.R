@@ -7,6 +7,12 @@ pacman::p_load(terra, tidyverse, hablar, readxl, sf, fs, glue, RColorBrewer, ggs
 g <- gc(reset = T)
 rm(list = ls())
 
+# Paths -------------------------------------------------------------------
+path <- './Bdatos_Automatizacion.xlsx'
+dout <- './output'
+fs::dir_create(dout)
+
+
 # Functions ---------------------------------------------------------------
 
 ## Normalize names
