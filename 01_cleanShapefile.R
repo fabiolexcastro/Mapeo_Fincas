@@ -124,3 +124,9 @@ read.tble <- function(path, shet, keys){
   return(tbl)
 }
 
+## Main function: join + reclassify + write -------------------------------
+name <- 'SolyAgua' ; shpe <- './data/SolyAgua_Shapefile/SolAgua_UM.shp' ; shet <- 'Datos_SolyAgua' ; keys <- c('Hacienda', 'Lote', 'UM') ; kpcl <- c('ID1', 'ID2')
+
+make.rcls <- function(name, shpe, shet, keys, kpcl){
+  
+}
