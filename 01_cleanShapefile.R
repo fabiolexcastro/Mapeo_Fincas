@@ -72,7 +72,15 @@ read.rnge <- function(path){
     dplyr::select(-fol, -rot)
   
   ## Check: the upper limit of one class must be the lower limit of the next one
-  
+  chk <- rsl %>% group_by(keyy) %>% arrange(ordr, .by_group = T) %>%
+    mutate(nxt = lead(lwr)) %>% ungroup() %>%
+    filter(!is.na(nxt), abs(upr - nxt) > 1e-9) %>%
+    dplyr::select(vrbl, keyy, ctgr, rnge, upr, nxt)
+  if(nrow(chk) > 0){
+    cat('Inconsistent limits (the lower limit of the next class is used):\n')
+    print(chk)
+  }
+  return(rsl)
   
 }
 
