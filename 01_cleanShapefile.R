@@ -84,6 +84,15 @@ read.rnge <- function(path){
   
 }
 
-
+## Reclassify a numeric vector with the ranges of one variable -----------
+rcls.vctr <- function(vctr, tble){
+  # vctr <- tble$N ; tble <- filter(rnge, keyy == 'n')
+  tbl <- arrange(tble, ordr)
+  brk <- c(tbl$lwr[1], tbl$lwr[-1], tbl$upr[nrow(tbl)])
+  if(is.unsorted(brk)) stop(glue('Non increasing limits for {tbl$vrbl[1]}'))
+  idx <- findInterval(round(vctr, 6), brk, rightmost.closed = T)
+  rsl <- ifelse(idx %in% 1:nrow(tbl), tbl$ctgr[pmax(idx, 1)], NA_character_)
+  return(rsl)
+}
 
 
