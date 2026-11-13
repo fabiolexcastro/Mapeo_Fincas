@@ -46,7 +46,23 @@ read.rnge <- function(path){
   nmx[] <- nrml.name(mtx)
   hdr <- which(nmx == 'categorias', arr.ind = T)
   
-
+  rsl <- map_dfr(.x = 1:nrow(hdr), .f = function(i){
+    row <- hdr[i, 1]
+    col <- hdr[i, 2]
+    ### Variables
+    vrs <- c()
+    j <- col + 3
+    while(j <= ncol(mtx) && !is.na(mtx[row, j])){vrs <- c(vrs, j); j <- j + 1}
+    ### Categories
+    rws <- c()
+    k <- row + 1
+    while(k <= nrow(mtx) && !is.na(mtx[k, col]) && any(!is.na(mtx[k, vrs]))){rws <- c(rws, k); k <- k + 1}
+    ### Long table
+    map_dfr(.x = vrs, .f = function(v){
+      tibble(blck = i, ordr = seq_along(rws), ctgr = mtx[rws, col], colr = mtx[rws, col + 1], rgbc = mtx[rws, col + 2], vrbl = mtx[row, v], rnge = mtx[rws, v], fol = col == 1)
+    })
+  })
+  
 }
 
 
