@@ -155,6 +155,11 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   
   ### Reclassify every column that has a range in the 'Rangos' sheet
   vrs <- setdiff(names(tbl), keys)
+  vrs <- vrs[nrml.name(vrs) %in% rnge$keyy]
+  out <- setdiff(names(tbl), c(keys, vrs))
+  cat('Reclasificada: ', paste(vrs, collapse = ', '), '\n')
+  cat('Not reclasificada (sin rango): ', paste(out, collapse = ', '), '\n')
+  
   
   
 }
