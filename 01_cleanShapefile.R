@@ -109,4 +109,18 @@ shrt.name <- function(nmes){
   return(rsl)
 }
 
+## Read one data sheet (duplicated columns are flagged with '_ray') -------
+read.tble <- function(path, shet, keys){
+  # shet <- 'Datos_SolyAgua' ; keys <- c('Hacienda', 'Lote', 'UM')
+  tbl <- readxl::read_excel(path, sheet = shet, .name_repair = 'minimal')
+  nms <- str_squish(names(tbl))
+  dpl <- duplicated(nms)
+  if(any(dpl)) cat(glue('{shet}: -> {paste0(nms[dpl], "_ray", collapse = ", ")}'), '\n')
+  nms[dpl] <- paste0(nms[dpl], '_ray')
+  names(tbl) <- nms
+  tbl <- mutate(tbl, across(all_of(keys), ~ str_squish(as.character(.x))))
+  dup <- tbl %>% count(across(all_of(keys))) %>% filter(n > 1)
+  if(nrow(dup) > 0){print(dup); stop(glue('{shet}: duplicated keys'))}
+  return(tbl)
+}
 
