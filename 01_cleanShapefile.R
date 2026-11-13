@@ -128,5 +128,16 @@ read.tble <- function(path, shet, keys){
 name <- 'SolyAgua' ; shpe <- './data/SolyAgua_Shapefile/SolAgua_UM.shp' ; shet <- 'Datos_SolyAgua' ; keys <- c('Hacienda', 'Lote', 'UM') ; kpcl <- c('ID1', 'ID2')
 
 make.rcls <- function(name, shpe, shet, keys, kpcl){
+ 
+  cat('Processing: ', name, '\n')
   
+  ### Shapefile (Z dropped, not needed for the maps) and table
+  shp <- sf::st_read(shpe, quiet = T) %>%
+    sf::st_zm(drop = T) %>%
+    dplyr::select(any_of(kpcl), all_of(keys)) %>%
+    mutate(across(all_of(keys), ~ str_squish(as.character(.x))))
+  
+  
+  
+   
 }
