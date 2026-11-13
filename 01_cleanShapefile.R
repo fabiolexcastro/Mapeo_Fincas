@@ -147,7 +147,8 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   ### Check the join (both directions)
   nsh <- anti_join(st_drop_geometry(shp), tbl, by = keys)
   ntb <- anti_join(tbl, st_drop_geometry(shp), by = keys)
-  
+  if(nrow(nsh) > 0){cat('Polygons without lab data:\n'); print(nsh)}
+  if(nrow(ntb) > 0){cat('Lab rows without polygon:\n'); print(dplyr::select(ntb, all_of(keys)))}
   
    
 }
