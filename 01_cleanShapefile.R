@@ -168,5 +168,9 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   
   ### Order: each original column followed by its _rcl
   ord <- c(keys, unlist(map(vrs, ~ c(.x, glue('{.x}_rcl')))), out)
+  shp <- dplyr::select(shp, any_of(kpcl), all_of(ord))
+  
+  
+  
   
 }
