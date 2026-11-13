@@ -95,4 +95,18 @@ rcls.vctr <- function(vctr, tble){
   return(rsl)
 }
 
+## Short names for the Shapefile (DBF limit: 10 characters) -----------
+shrt.name <- function(nmes){
+  # nmes <- c('PSI_sue_rcl', 'Raices_Vivas_totales_rcl')
+  rsl <- nmes %>%
+    str_replace('^Raices_Vivas_totales', 'RVT') %>%
+    str_replace('^Raices_totales', 'RT') %>%
+    str_replace('^Raices_vivas', 'RV') %>%
+    str_replace('^Radopholus_Similis', 'RS')
+  lng <- nchar(rsl) > 10
+  rsl[lng] <- str_replace(rsl[lng], '_sue', '_s')
+  if(any(nchar(rsl) > 10) | any(duplicated(rsl))) stop(glue('Shapefile names still invalid: {paste(rsl[nchar(rsl) > 10 | duplicated(rsl)], collapse = ", ")}'))
+  return(rsl)
+}
+
 
