@@ -112,7 +112,7 @@ shrt.name <- function(nmes){
     str_replace('^Raices_vivas', 'RV') %>%
     str_replace('^Radopholus_Similis', 'RS')
   lng <- nchar(rsl) > 10
-  rsl[lng] <- str_replace(rsl[lng], '_sue', '_s')
+  rsl[lng] <- rsl[lng] %>% str_replace('_sue', '_s') %>% str_replace('_ray', '_r')
   if(any(nchar(rsl) > 10) | any(duplicated(rsl))) stop(glue('Shapefile names still invalid: {paste(rsl[nchar(rsl) > 10 | duplicated(rsl)], collapse = ", ")}'))
   return(rsl)
 }
@@ -136,7 +136,8 @@ read.tble <- function(path, shet, keys){
 name <- 'SolyAgua' ; shpe <- './data/SolyAgua_Shapefile/SolAgua_UM.shp' ; shet <- 'Datos_SolyAgua' ; keys <- c('Hacienda', 'Lote', 'UM') ; kpcl <- c('ID1', 'ID2')
 
 make.rcls <- function(name, shpe, shet, keys, kpcl){
- 
+  # name <- 'SolyAgua' ; shpe <- './data/SolyAgua_Shapefile/SolAgua_UM.shp' ; shet <- 'Datos_SolyAgua' ; keys <- c('Hacienda', 'Lote', 'UM') ; kpcl <- c('ID1', 'ID2')
+  
   cat('Processing: ', name, '\n')
   
   ### Shapefile (Z dropped, not needed for the maps) and table
@@ -155,12 +156,12 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   ### Join (all polygons are kept; without data -> NA)
   shp <- left_join(shp, tbl, by = keys)
   
-  ### Reclassify every column that has a range in the 'Rangos' sheet
+  ### Reclassify every column that has a range in the 'Rangos' sheet (flags '_ray' excluded)
   vrs <- setdiff(names(tbl), keys)
-  vrs <- vrs[nrml.name(vrs) %in% rnge$keyy]
+  vrs <- vrs[nrml.name(vrs) %in% rnge$keyy & !str_detect(vrs, '_ray$')]
   out <- setdiff(names(tbl), c(keys, vrs))
   cat('Reclasificada: ', paste(vrs, collapse = ', '), '\n')
-  cat('Not reclasificada (sin rango): ', paste(out, collapse = ', '), '\n')
+  cat('No reclasificada (sin rango): ', paste(out, collapse = ', '), '\n')
   
   for(v in vrs){
     shp[[glue('{v}_rcl')]] <- rcls.vctr(vctr = shp[[v]], tble = filter(rnge, keyy == nrml.name(v)))
@@ -179,7 +180,12 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   ### Write: GeoPackage (full names) + Shapefile (short names) + names dictionary
   sf::st_write(shp, glue('{dout}/{name}_rcl.gpkg'), append = F, quiet = T)
   sf::st_write(shp, glue('{dout}/{name}_rcl.shp'), append = F, quiet = T)
- 
-  
+  dct <- tibble(full = setdiff(names(shp), attr(shp, 'sf_column'))) %>% mutate(shpf = shrt.name(full))
+  sh2 <- shp
+  names(sh2)[match(dct$full, names(sh2))] <- dct$shpf
+  sf::st_write(sh2, glue('{dout}/{name}_rcl.shp'), append = F, quiet = T, layer_options = 'ENCODING=UTF-8')
+  write_csv(filter(dct, full != shpf), glue('{dout}/{name}_rcl_shp_names.csv'))
+  cat('Done!\n')
+  return(shp)
   
 }
