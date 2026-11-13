@@ -166,6 +166,7 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
     shp[[glue('{v}_rcl')]] <- rcls.vctr(vctr = shp[[v]], tble = filter(rnge, keyy == nrml.name(v)))
   }
   
-  
+  ### Order: each original column followed by its _rcl
+  ord <- c(keys, unlist(map(vrs, ~ c(.x, glue('{.x}_rcl')))), out)
   
 }
