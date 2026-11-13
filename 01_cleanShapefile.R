@@ -178,5 +178,8 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   
   ### Write: GeoPackage (full names) + Shapefile (short names) + names dictionary
   sf::st_write(shp, glue('{dout}/{name}_rcl.gpkg'), append = F, quiet = T)
+  sf::st_write(shp, glue('{dout}/{name}_rcl.shp'), append = F, quiet = T)
+ 
+  
   
 }
