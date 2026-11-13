@@ -153,4 +153,8 @@ make.rcls <- function(name, shpe, shet, keys, kpcl){
   ### Join (all polygons are kept; without data -> NA)
   shp <- left_join(shp, tbl, by = keys)
   
+  ### Reclassify every column that has a range in the 'Rangos' sheet
+  vrs <- setdiff(names(tbl), keys)
+  
+  
 }
