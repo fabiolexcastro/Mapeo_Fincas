@@ -162,5 +162,16 @@ def simbologia(lyr, campo, clases):
     # Orden Muy Bajo -> Muy Alto, encabezado y sin <all other values>
     cim = lyr.getDefinition("V3")
     cim.renderer.useDefaultSymbol = False
-
+    for grp in cim.renderer.groups:
+        grp.heading = "Categorías"
+        fuera = [c.values[0].fieldValues[0] for c in grp.classes
+                 if c.values[0].fieldValues[0] not in info]
+        if fuera:
+            print(f"   aviso {crl}: valores sin rango en el Excel (no se dibujan): {fuera}")
+        grp.classes = sorted([c for c in grp.classes if c.values[0].fieldValues[0] in info],
+                             key=lambda c: orden.index(c.values[0].fieldValues[0]))
+    lyr.setDefinition(cim)
+    
+    
+  
 
