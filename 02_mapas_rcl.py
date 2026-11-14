@@ -212,7 +212,13 @@ def leyenda(lyt, lyr):
 
 def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
     """Todos los mapas de una hacienda. Devuelve {campo: error}."""
-    
+    aprx = aprx or arcpy.mp.ArcGISProject(APRX)
+    rangos = rangos or leer_rangos()
+    os.makedirs(SALIDA, exist_ok=True)
+    lyt, lyr = buscar_capa(aprx, layout, capa)
+    campos = {f.name for f in arcpy.ListFields(lyr)}
+    original = lyr.getDefinition("V3") # para dejar la plantilla como estaba
+    errores = {}
     
     
 
