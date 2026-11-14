@@ -159,7 +159,8 @@ def simbologia(lyr, campo, clases):
                 itm.label = etq
     lyr.symbology = sym
 
-  
-
+    # Orden Muy Bajo -> Muy Alto, encabezado y sin <all other values>
+    cim = lyr.getDefinition("V3")
+    cim.renderer.useDefaultSymbol = False
 
 
