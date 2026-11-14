@@ -126,7 +126,16 @@ def clave_rango(campo):
 # FUNCIONES ARCPY
 # =============================================================================
 
-
+def buscar_capa(aprx, layout, capa):
+    lyt = aprx.listLayouts(layout)
+    if not lyt:
+        raise ValueError(f"No existe el layout '{layout}'.")
+    lyt = lyt[0]
+    mf = lyt.listElements("MAPFRAME_ELEMENT")[0]
+    lyr = mf.map.listLayers(capa)
+    if not lyr:
+        raise ValueError(f"La capa '{capa}' no está en el mapa '{mf.map.name}'.")
+    return lyt, lyr[0]
 
 
 
