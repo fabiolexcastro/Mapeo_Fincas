@@ -74,5 +74,11 @@ VARIABLES = {
 }
 
 
-
+# =============================================================================
+# FUNCIONES PURAS (no dependen de arcpy)
+# =============================================================================
+def nrml(texto):
+    """'Raíces Vivas totales' -> 'raices_vivas_totales'."""
+    txt = unicodedata.normalize("NFKD", str(texto)).encode("ascii", "ignore").decode()
+    return "_".join(txt.split()).lower()
 
