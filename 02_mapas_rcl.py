@@ -82,3 +82,9 @@ def nrml(texto):
     txt = unicodedata.normalize("NFKD", str(texto)).encode("ascii", "ignore").decode()
     return "_".join(txt.split()).lower()
 
+def limpiar_rango(texto):
+    """'<0.5' -> '< 0.5' ; '2.25 -  2.5' -> '2.25 - 2.5'."""
+    txt = " ".join(str(texto).split())
+    txt = re.sub(r"^([<>])\s*", r"\1 ", txt)
+    return re.sub(r"\s*-\s*", " - ", txt)
+
