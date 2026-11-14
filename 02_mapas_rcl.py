@@ -176,7 +176,10 @@ def histograma(lyt, lyr, campo, titulo):
     """Cambia el campo y los títulos del histograma del chart frame. True si lo encontró."""
     cim_lyr = lyr.getDefinition("V3")
     uri = cim_lyr.uRI
-    
+    frames = [e for e in lyt.getDefinition("V3").elements
+              if type(e).__name__ == "CIMChartFrame" and e.mapMemberURI == uri]
+    if not frames:
+        return False
     
     
     
