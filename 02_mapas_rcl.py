@@ -239,5 +239,7 @@ def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
             except Exception as e:      # una variable mala no detiene las demás
                 errores[campo] = str(e)
                 print(f"   ERR {campo}: {e}")
-
+    finally:
+        lyr.setDefinition(original)
+    return errores
 
