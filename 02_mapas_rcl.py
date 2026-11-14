@@ -242,4 +242,14 @@ def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
     finally:
         lyr.setDefinition(original)
     return errores
+  
+# =============================================================================
+if __name__ == "__main__" and arcpy is not None:
+    proyecto = arcpy.mp.ArcGISProject(APRX)
+    tabla = leer_rangos()
+    # 1 variable
+    crear_mapas(*HACIENDAS[0], variables=["N"], rangos=tabla, aprx=proyecto)
+    # Todas las variables y haciendas:
+    # for h in HACIENDAS:
+    #     crear_mapas(*h, rangos=tabla, aprx=proyecto)
 
