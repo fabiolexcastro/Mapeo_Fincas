@@ -50,6 +50,34 @@ make.rcls <- function(name, shpe, shet, keys){
   return(shp)
 }
 
+# Ranges ------------------------------------------------------------------
+shts <- grep('^Rango_', readxl::excel_sheets(path), value = T) %>% setdiff('Rango_3vbajo')
+rnge <- map_dfr(.x = shts, .f = function(s){
+  readxl::read_excel(path, sheet = s, col_types = 'text') %>%
+    dplyr::select(ctgr = 1, 4:last_col()) %>%
+    pivot_longer(-ctgr, names_to = 'vrbl', values_to = 'rnge') %>%
+    drop_na() %>%
+    mutate(vrbl = if(s %in% c('Rango_pH', 'Rango_CE', 'Rango_PSI')) paste0(vrbl, '_sue') else vrbl)
+}) %>%
+  mutate(ctgr = str_squish(ctgr),
+         keyy = nrml.name(vrbl),
+         lwr = ifelse(str_detect(rnge, '<'), -Inf, parse_number(rnge)) / ifelse(str_detect(rnge, '%'), 100, 1))
+rnge
+
+# To apply the function ---------------------------------------------------
+sola <- make.rcls(name = 'SolyAgua', shpe = './data/SolyAgua_Shapefile/SolAgua_UM.shp', shet = 'Datos_SolyAgua', keys = c('Hacienda', 'Lote', 'UM'))
+rqlt <- make.rcls(name = 'Raquelita', shpe = './data/Raquelita_Shapefile/Raquelita_UM.shp', shet = 'Datos_Raquelita', keys = c('Hacienda', 'Lote', 'UM'))
+dfrn <- make.rcls(name = 'DeliaFrancia', shpe = './data/DeliaFrancia_Shapefile/DeliaFrancia_UM.shp', shet = 'Datos_DF', keys = c('UM'))
+
+# Check -------------------------------------------------------------------
+
+sola
+
+
+
+
+
+
 
 
 
