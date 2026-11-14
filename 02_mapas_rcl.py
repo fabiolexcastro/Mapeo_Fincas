@@ -88,3 +88,27 @@ def limpiar_rango(texto):
     txt = re.sub(r"^([<>])\s*", r"\1 ", txt)
     return re.sub(r"\s*-\s*", " - ", txt)
 
+
+def leer_rangos(ruta=EXCEL):
+    """{clave_variable: [(categoria, (r, g, b), rango), ...]} en el orden del Excel."""
+    wb = openpyxl.load_workbook(ruta, data_only=True, read_only=True)
+    rangos = {}
+    for hoja in wb.sheetnames:
+        if not hoja.startswith("Rango_") or hoja == "Rango_3vbajo":
+            continue
+        filas = list(wb[hoja].iter_rows(values_only=True))
+        enc = filas[0]
+        for j in range(3, len(enc)):
+            if enc[j] is None:
+                continue
+            clave = nrml(enc[j]) + ("_sue" if hoja in HOJAS_SUE else "")
+            clases = []
+            for f in filas[1:]:
+                if f[0] is None or j >= len(f) or f[j] is None:
+                    continue
+                hx = str(f[2]).strip().lstrip("#")
+                rgb = tuple(int(hx[i:i + 2], 16) for i in (0, 2, 4))
+                clases.append((" ".join(str(f[0]).split()), rgb, limpiar_rango(f[j])))
+            rangos[clave] = clases
+    return rangos
+
