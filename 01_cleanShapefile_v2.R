@@ -29,6 +29,26 @@ rcls.vctr <- function(vctr, vrbl){
   return(rsl)
 }
 
+## Join + reclassify + write
+make.rcls <- function(name, shpe, shet, keys){
+  # name <- 'SolyAgua' ; shpe <- './data/SolyAgua_Shapefile/SolAgua_UM.shp' ; shet <- 'Datos_SolyAgua' ; keys <- c('Hacienda', 'Lote', 'UM')
+  cat('Processing: ', name, '\n')
+  tbl <- readxl::read_excel(path, sheet = shet, .name_repair = 'minimal')
+  names(tbl) <- make.unique(str_squish(names(tbl)), sep = '_')
+  tbl <- mutate(tbl, across(all_of(keys), ~ str_squish(as.character(.x))))
+  shp <- sf::st_read(shpe, quiet = T) %>%
+    sf::st_zm() %>%
+    dplyr::select(all_of(keys)) %>%
+    mutate(across(all_of(keys), ~ str_squish(as.character(.x)))) %>%
+    left_join(tbl, by = keys)
+  vrs <- names(tbl)[nrml.name(names(tbl)) %in% rnge$keyy]
+  for(v in vrs){shp[[paste0(v, '_rcl')]] <- rcls.vctr(vctr = shp[[v]], vrbl = v)}
+  shp <- dplyr::select(shp, all_of(keys), all_of(as.vector(rbind(vrs, paste0(vrs, '_rcl')))), everything())
+  names(shp) <- str_replace_all(names(shp), c('Raices_Vivas_totales' = 'RVT', 'Raices_totales' = 'RT', 'Raices_vivas' = 'RV', 'Radopholus_Similis' = 'RS', 'PSI_sue_rcl' = 'PSI_s_rcl'))
+  sf::st_write(shp, glue('{dout}/{name}_rcl.shp'), append = F, quiet = T, layer_options = 'ENCODING=UTF-8')
+  cat('Done!\n')
+  return(shp)
+}
 
 
 
