@@ -1,11 +1,13 @@
+# -*- coding: utf-8 -*-
 """
 02_mapas_rcl.py
 -------------------------------------------------------------------------------
 Mapas por categorías (análisis foliar, suelo y raíces) en ArcGIS Pro a partir
-de los shapefiles *_rcl.shp que genera 01_cleanShapefile_v2.R. 
+de los shapefiles *_rcl.shp que genera 01_cleanShapefile_v2.R.
+
+
 -------------------------------------------------------------------------------
 """
-
 import os
 import re
 import unicodedata
@@ -14,7 +16,7 @@ import openpyxl
 
 try:
     import arcpy
-except ImportError:  
+except ImportError:  # permite probar las funciones puras fuera de ArcGIS Pro
     arcpy = None
 
 # =============================================================================
@@ -25,9 +27,9 @@ EXCEL = os.path.join(ROOT, "Bdatos_Automatizacion_v2.xlsx")
 SALIDA = os.path.join(ROOT, "maps")
 APRX = "CURRENT"          # proyecto abierto en ArcGIS Pro
 
-FECHA = "Octubre 2026"  
-FECHA_CORTA = "Oct2026"   
-PNG = False               
+FECHA = "Octubre 2026"  # va en el título
+FECHA_CORTA = "Oct2026"   # va en el nombre del archivo
+PNG = False               # True = exporta también PNG
 RESOLUCION = 300
 
 # Una fila por hacienda: (prefijo del archivo, nombre del layout, nombre de la capa _rcl)
@@ -51,7 +53,7 @@ VARIABLES = {
     "Fe": ("Fe (ppm) foliar", "Fefol"),
     "Mn": ("Mn (ppm) foliar", "Mnfol"),
     "B":  ("B (ppm) foliar",  "Bfol"),
-     # Suelo
+    # Suelo
     "pH_sue":  ("pH suelo",                  "pHsue"),
     "CE_sue":  ("CE (dS/m) suelo",           "CEsue"),
     "K_sue":   ("K (meq/100g ss) suelo",     "Ksue"),
@@ -73,6 +75,11 @@ VARIABLES = {
     "RS":  ("Radopholus similis/100g raíces",   "RS"),
 }
 
+# Nombres cortos del shapefile -> nombre de la variable en las hojas Rango_*
+ALIAS = {"RT": "raices_totales", "RVT": "raices_vivas_totales",
+         "RV": "raices_vivas", "RS": "radopholus_similis"}
+HOJAS_SUE = ("Rango_pH", "Rango_CE", "Rango_PSI")   # en el Excel no llevan _sue
+
 
 # =============================================================================
 # FUNCIONES PURAS (no dependen de arcpy)
@@ -81,6 +88,7 @@ def nrml(texto):
     """'Raíces Vivas totales' -> 'raices_vivas_totales'."""
     txt = unicodedata.normalize("NFKD", str(texto)).encode("ascii", "ignore").decode()
     return "_".join(txt.split()).lower()
+
 
 def limpiar_rango(texto):
     """'<0.5' -> '< 0.5' ; '2.25 -  2.5' -> '2.25 - 2.5'."""
@@ -116,16 +124,15 @@ def leer_rangos(ruta=EXCEL):
 def campo_rcl(campo):
     """Nombre del campo categórico en el .shp (límite de 10 caracteres)."""
     return "PSI_s_rcl" if campo == "PSI_sue" else campo + "_rcl"
-  
+
 
 def clave_rango(campo):
     return ALIAS.get(campo, nrml(campo))
-  
-  
+
+
 # =============================================================================
 # FUNCIONES ARCPY
 # =============================================================================
-
 def buscar_capa(aprx, layout, capa):
     lyt = aprx.listLayouts(layout)
     if not lyt:
@@ -136,16 +143,16 @@ def buscar_capa(aprx, layout, capa):
     if not lyr:
         raise ValueError(f"La capa '{capa}' no está en el mapa '{mf.map.name}'.")
     return lyt, lyr[0]
-  
-  
+
+
 def simbologia(lyr, campo, clases):
     """Valores únicos sobre <campo>_rcl con colores y etiquetas del Excel."""
     crl = campo_rcl(campo)
     info = {c: (rgb, f"{rng} ({c})") for c, rgb, rng in clases}
     orden = [c for c, _, _ in clases]
-    
+
     sym = lyr.symbology
-    sym.updateRenderer("SimpleRenderer")       
+    sym.updateRenderer("SimpleRenderer")       # fuerza a regenerar las clases
     sym.updateRenderer("UniqueValueRenderer")
     sym.renderer.fields = [crl]
     for grp in sym.renderer.groups:
@@ -159,7 +166,7 @@ def simbologia(lyr, campo, clases):
                 itm.label = etq
     lyr.symbology = sym
 
-    # Orden Muy Bajo -> Muy Alto, encabezado y sin <all other values>
+    # CIM: orden Muy Bajo -> Muy Alto, encabezado y sin <all other values>
     cim = lyr.getDefinition("V3")
     cim.renderer.useDefaultSymbol = False
     for grp in cim.renderer.groups:
@@ -171,7 +178,8 @@ def simbologia(lyr, campo, clases):
         grp.classes = sorted([c for c in grp.classes if c.values[0].fieldValues[0] in info],
                              key=lambda c: orden.index(c.values[0].fieldValues[0]))
     lyr.setDefinition(cim)
-    
+
+
 def histograma(lyt, lyr, campo, titulo):
     """Cambia el campo y los títulos del histograma del chart frame. True si lo encontró."""
     cim_lyr = lyr.getDefinition("V3")
@@ -198,8 +206,9 @@ def histograma(lyt, lyr, campo, titulo):
     lyr.setDefinition(cim_lyr)
     return ok
 
+
 def leyenda(lyt, lyr):
-    """Muestra nombre de capa (= título) y encabezado ('Categorías').""" 
+    """Muestra nombre de capa (= título) y encabezado ('Categorías')."""
     uri = lyr.getDefinition("V3").uRI
     cim = lyt.getDefinition("V3")
     for e in cim.elements:
@@ -208,7 +217,7 @@ def leyenda(lyt, lyr):
                 if it.layer == uri:
                     it.showLayerName, it.showHeading = True, True
     lyt.setDefinition(cim)
-    
+
 
 def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
     """Todos los mapas de una hacienda. Devuelve {campo: error}."""
@@ -217,7 +226,7 @@ def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
     os.makedirs(SALIDA, exist_ok=True)
     lyt, lyr = buscar_capa(aprx, layout, capa)
     campos = {f.name for f in arcpy.ListFields(lyr)}
-    original = lyr.getDefinition("V3") # para dejar la plantilla como estaba
+    original = lyr.getDefinition("V3")           # para dejar la plantilla como estaba
     errores = {}
     print(f"== {prefijo} ({layout} / {capa})")
     try:
@@ -232,7 +241,8 @@ def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
                 lyr.name = f"{titulo} - {FECHA}"
                 leyenda(lyt, lyr)
                 base = os.path.join(SALIDA, f"{prefijo}_{codigo}_{FECHA_CORTA}")
-                lyt.exportToPDF(base + ".pdf", resolution=RESOLUCION, georef_info=True,layers_attributes="LAYERS_AND_ATTRIBUTES")
+                lyt.exportToPDF(base + ".pdf", resolution=RESOLUCION, georef_info=True,
+                                layers_attributes="LAYERS_AND_ATTRIBUTES")
                 if PNG:
                     lyt.exportToPNG(base + ".png", resolution=RESOLUCION)
                 print(f"   OK  {campo:<8} histograma={'sí' if hst else 'NO ENCONTRADO'} -> {base}.pdf")
@@ -242,14 +252,14 @@ def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
     finally:
         lyr.setDefinition(original)
     return errores
-  
+
+
 # =============================================================================
 if __name__ == "__main__" and arcpy is not None:
     proyecto = arcpy.mp.ArcGISProject(APRX)
     tabla = leer_rangos()
-    # 1 variable
+    # Prueba con una sola variable:
     crear_mapas(*HACIENDAS[0], variables=["N"], rangos=tabla, aprx=proyecto)
     # Todas las variables y haciendas:
     # for h in HACIENDAS:
     #     crear_mapas(*h, rangos=tabla, aprx=proyecto)
-
