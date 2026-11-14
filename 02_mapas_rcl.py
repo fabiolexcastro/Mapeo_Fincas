@@ -112,3 +112,7 @@ def leer_rangos(ruta=EXCEL):
             rangos[clave] = clases
     return rangos
 
+
+def campo_rcl(campo):
+    """Nombre del campo categórico en el .shp (límite de 10 caracteres)."""
+    return "PSI_s_rcl" if campo == "PSI_sue" else campo + "_rcl"
