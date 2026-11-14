@@ -136,6 +136,15 @@ def buscar_capa(aprx, layout, capa):
     if not lyr:
         raise ValueError(f"La capa '{capa}' no está en el mapa '{mf.map.name}'.")
     return lyt, lyr[0]
+  
+  
+def simbologia(lyr, campo, clases):
+    """Valores únicos sobre <campo>_rcl con colores y etiquetas del Excel."""
+    crl = campo_rcl(campo)
+    info = {c: (rgb, f"{rng} ({c})") for c, rgb, rng in clases}
+    orden = [c for c, _, _ in clases]
+
+  
 
 
 
