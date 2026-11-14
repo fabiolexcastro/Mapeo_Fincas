@@ -200,5 +200,15 @@ def histograma(lyt, lyr, campo, titulo):
 
 def leyenda(lyt, lyr):
     """Muestra nombre de capa (= título) y encabezado ('Categorías').""" 
-  
+    uri = lyr.getDefinition("V3").uRI
+    cim = lyt.getDefinition("V3")
+    for e in cim.elements:
+        if type(e).__name__ == "CIMLegend":
+            for it in e.items:
+                if it.layer == uri:
+                    it.showLayerName, it.showHeading = True, True
+    lyt.setDefinition(cim)
+    
+    
+
 
