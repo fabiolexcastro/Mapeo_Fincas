@@ -145,7 +145,7 @@ def simbologia(lyr, campo, clases):
     orden = [c for c, _, _ in clases]
     
     sym = lyr.symbology
-    sym.updateRenderer("SimpleRenderer")       # fuerza a regenerar las clases
+    sym.updateRenderer("SimpleRenderer")       
     sym.updateRenderer("UniqueValueRenderer")
     sym.renderer.fields = [crl]
     for grp in sym.renderer.groups:
