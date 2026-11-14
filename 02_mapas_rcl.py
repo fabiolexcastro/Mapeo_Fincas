@@ -195,7 +195,9 @@ def histograma(lyt, lyr, campo, titulo):
                     setattr(ax, prop, True)
             if i == 0:
                 ax.title, ax.useAutomaticTitle = titulo, False
-    
+    lyr.setDefinition(cim_lyr)
+    return ok
+
     
   
 
