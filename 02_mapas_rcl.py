@@ -6,4 +6,16 @@ de los shapefiles *_rcl.shp que genera 01_cleanShapefile_v2.R.
 -------------------------------------------------------------------------------
 """
 
+import os
+import re
+import unicodedata
+
+import openpyxl
+
+try:
+    import arcpy
+except ImportError:  
+    arcpy = None
+
+
 
