@@ -143,6 +143,21 @@ def simbologia(lyr, campo, clases):
     crl = campo_rcl(campo)
     info = {c: (rgb, f"{rng} ({c})") for c, rgb, rng in clases}
     orden = [c for c, _, _ in clases]
+    
+    sym = lyr.symbology
+    sym.updateRenderer("SimpleRenderer")       # fuerza a regenerar las clases
+    sym.updateRenderer("UniqueValueRenderer")
+    sym.renderer.fields = [crl]
+    for grp in sym.renderer.groups:
+        for itm in grp.items:
+            val = itm.values[0][0]
+            if val in info:
+                rgb, etq = info[val]
+                itm.symbol.color = {"RGB": [*rgb, 100]}
+                itm.symbol.outlineColor = {"RGB": [0, 0, 0, 100]}
+                itm.symbol.outlineWidth = 0.5
+                itm.label = etq
+    lyr.symbology = sym
 
   
 
