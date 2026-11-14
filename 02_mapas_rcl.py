@@ -25,5 +25,9 @@ EXCEL = os.path.join(ROOT, "Bdatos_Automatizacion_v2.xlsx")
 SALIDA = os.path.join(ROOT, "maps")
 APRX = "CURRENT"          # proyecto abierto en ArcGIS Pro
 
+FECHA = "Octubre 2026"  # va en el título
+FECHA_CORTA = "Oct2026"   # va en el nombre del archivo
+PNG = False               # True = exporta también PNG
+RESOLUCION = 300
 
 
