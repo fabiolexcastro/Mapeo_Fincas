@@ -180,7 +180,21 @@ def histograma(lyt, lyr, campo, titulo):
               if type(e).__name__ == "CIMChartFrame" and e.mapMemberURI == uri]
     if not frames:
         return False
-    
+    charts = [c for c in (cim_lyr.charts or []) if c.name == frames[0].chartName]
+    ok = False
+    for chart in charts[:1]:
+        for s in chart.series:
+            if type(s).__name__ == "CIMChartHistogramSeries":
+                s.fields = [campo]
+                ok = True
+        gp = chart.generalProperties
+        gp.title, gp.useAutomaticTitle, gp.showTitle = f"Distribución de {titulo}", False, True
+        for i, ax in enumerate(chart.axes or []):
+            for prop in ("calculateAutomaticMinimum", "calculateAutomaticMaximum"):
+                if hasattr(ax, prop):
+                    setattr(ax, prop, True)
+            if i == 0:
+                ax.title, ax.useAutomaticTitle = titulo, False
     
     
   
