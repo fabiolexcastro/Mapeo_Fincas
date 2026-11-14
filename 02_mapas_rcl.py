@@ -172,6 +172,13 @@ def simbologia(lyr, campo, clases):
                              key=lambda c: orden.index(c.values[0].fieldValues[0]))
     lyr.setDefinition(cim)
     
+def histograma(lyt, lyr, campo, titulo):
+    """Cambia el campo y los títulos del histograma del chart frame. True si lo encontró."""
+    cim_lyr = lyr.getDefinition("V3")
+    uri = cim_lyr.uRI
+    
+    
+    
     
   
 
