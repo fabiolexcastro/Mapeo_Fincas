@@ -51,7 +51,21 @@ VARIABLES = {
     "Fe": ("Fe (ppm) foliar", "Fefol"),
     "Mn": ("Mn (ppm) foliar", "Mnfol"),
     "B":  ("B (ppm) foliar",  "Bfol"),
-    
+     # Suelo
+    "pH_sue":  ("pH suelo",                  "pHsue"),
+    "CE_sue":  ("CE (dS/m) suelo",           "CEsue"),
+    "K_sue":   ("K (meq/100g ss) suelo",     "Ksue"),
+    "Ca_sue":  ("Ca (meq/100g ss) suelo",    "Casue"),
+    "Mg_sue":  ("Mg (meq/100g ss) suelo",    "Mgsue"),
+    "P_sue":   ("P (ppm) suelo",             "Psue"),
+    "S_sue":   ("S (ppm) suelo",             "Ssue"),
+    "Zn_sue":  ("Zn (ppm) suelo",            "Znsue"),
+    "Cu_sue":  ("Cu (ppm) suelo",            "Cusue"),
+    "Fe_sue":  ("Fe (ppm) suelo",            "Fesue"),
+    "Mn_sue":  ("Mn (ppm) suelo",            "Mnsue"),
+    "B_sue":   ("B (ppm) suelo",             "Bsue"),
+    "MO_sue":  ("Materia Orgánica (%)",      "MO"),
+    "PSI_sue": ("PSI (%) suelo",             "PSIsue"),
 }
 
 
