@@ -220,6 +220,24 @@ def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
     original = lyr.getDefinition("V3") # para dejar la plantilla como estaba
     errores = {}
     print(f"== {prefijo} ({layout} / {capa})")
-    
+    try:
+        for campo in (variables or VARIABLES):
+            titulo, codigo = VARIABLES[campo]
+            if campo not in campos or campo_rcl(campo) not in campos:
+                print(f"   salta {campo}: no está en la capa")
+                continue
+            try:
+                simbologia(lyr, campo, rangos[clave_rango(campo)])
+                hst = histograma(lyt, lyr, campo, titulo)
+                lyr.name = f"{titulo} - {FECHA}"
+                leyenda(lyt, lyr)
+                base = os.path.join(SALIDA, f"{prefijo}_{codigo}_{FECHA_CORTA}")
+                lyt.exportToPDF(base + ".pdf", resolution=RESOLUCION, georef_info=True,layers_attributes="LAYERS_AND_ATTRIBUTES")
+                if PNG:
+                    lyt.exportToPNG(base + ".png", resolution=RESOLUCION)
+                print(f"   OK  {campo:<8} histograma={'sí' if hst else 'NO ENCONTRADO'} -> {base}.pdf")
+            except Exception as e:      # una variable mala no detiene las demás
+                errores[campo] = str(e)
+                print(f"   ERR {campo}: {e}")
 
 
