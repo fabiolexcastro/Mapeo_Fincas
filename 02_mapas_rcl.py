@@ -37,3 +37,23 @@ HACIENDAS = [
     # ("DF",  "Layout_DF",        "Categorías"),
 ]
 
+# Campo numérico del shapefile: (título sin fecha, código para el nombre del archivo)
+VARIABLES = {
+    # Foliar
+    "N":  ("N (%) foliar",   "Nfol"),
+    "P":  ("P (%) foliar",   "Pfol"),
+    "K":  ("K (%) foliar",   "Kfol"),
+    "Ca": ("Ca (%) foliar",  "Cafol"),
+    "Mg": ("Mg (%) foliar",  "Mgfol"),
+    "S":  ("S (%) foliar",   "Sfol"),
+    "Zn": ("Zn (ppm) foliar", "Znfol"),
+    "Cu": ("Cu (ppm) foliar", "Cufol"),
+    "Fe": ("Fe (ppm) foliar", "Fefol"),
+    "Mn": ("Mn (ppm) foliar", "Mnfol"),
+    "B":  ("B (ppm) foliar",  "Bfol"),
+    
+}
+
+
+
+
