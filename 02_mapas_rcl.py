@@ -66,6 +66,11 @@ VARIABLES = {
     "B_sue":   ("B (ppm) suelo",             "Bsue"),
     "MO_sue":  ("Materia Orgánica (%)",      "MO"),
     "PSI_sue": ("PSI (%) suelo",             "PSIsue"),
+    # Raíces y nematodos (solo Delia Francia)
+    "RT":  ("Raíces totales (g/planta)",        "RT"),
+    "RVT": ("Raíces Vivas totales (g/planta)",  "RVT"),
+    "RV":  ("Raíces Vivas (%)",                 "RV"),
+    "RS":  ("Radopholus similis/100g raíces",   "RS"),
 }
 
 
