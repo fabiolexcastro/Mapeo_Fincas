@@ -198,6 +198,7 @@ def histograma(lyt, lyr, campo, titulo):
     lyr.setDefinition(cim_lyr)
     return ok
 
-    
+def leyenda(lyt, lyr):
+    """Muestra nombre de capa (= título) y encabezado ('Categorías').""" 
   
 
