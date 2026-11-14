@@ -219,7 +219,7 @@ def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
     campos = {f.name for f in arcpy.ListFields(lyr)}
     original = lyr.getDefinition("V3") # para dejar la plantilla como estaba
     errores = {}
-    
+    print(f"== {prefijo} ({layout} / {capa})")
     
 
 
