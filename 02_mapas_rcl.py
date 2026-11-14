@@ -209,6 +209,11 @@ def leyenda(lyt, lyr):
                     it.showLayerName, it.showHeading = True, True
     lyt.setDefinition(cim)
     
+
+def crear_mapas(prefijo, layout, capa, variables=None, rangos=None, aprx=None):
+    """Todos los mapas de una hacienda. Devuelve {campo: error}."""
+    
+    
     
 
 
