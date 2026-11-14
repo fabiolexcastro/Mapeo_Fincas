@@ -25,9 +25,15 @@ EXCEL = os.path.join(ROOT, "Bdatos_Automatizacion_v2.xlsx")
 SALIDA = os.path.join(ROOT, "maps")
 APRX = "CURRENT"          # proyecto abierto en ArcGIS Pro
 
-FECHA = "Octubre 2026"  # va en el título
-FECHA_CORTA = "Oct2026"   # va en el nombre del archivo
-PNG = False               # True = exporta también PNG
+FECHA = "Octubre 2026"  
+FECHA_CORTA = "Oct2026"   
+PNG = False               
 RESOLUCION = 300
 
+# Una fila por hacienda: (prefijo del archivo, nombre del layout, nombre de la capa _rcl)
+HACIENDAS = [
+    ("SA", "Layout", "Categorías"),
+    # ("Raq", "Layout_Raquelita", "Categorías"),
+    # ("DF",  "Layout_DF",        "Categorías"),
+]
 
