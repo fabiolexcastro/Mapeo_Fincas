@@ -1,3 +1,5 @@
 
 import sys, importlib
-sys.path.append(r"C:\Users\chern\OneDrive\ALIA2\Proyectos\Banano\GIS_Automatizacion_Mapas")
+sys.path.append(r"C:\Users\chern\OneDrive\ALIA2\Proyectos\Banano\GIS_Automatizacion_Mapas")\
+mr = importlib.import_module("02_mapas_rcl")   # el nombre empieza con número: no sirve "import 02_..."
+importlib.reload(mr)
