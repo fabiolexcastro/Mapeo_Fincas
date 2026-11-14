@@ -22,5 +22,8 @@ except ImportError:
 # =============================================================================
 ROOT = r"C:\Users\chern\OneDrive\ALIA2\Proyectos\Banano\GIS_Automatizacion_Mapas"
 EXCEL = os.path.join(ROOT, "Bdatos_Automatizacion_v2.xlsx")
+SALIDA = os.path.join(ROOT, "maps")
+APRX = "CURRENT"          # proyecto abierto en ArcGIS Pro
+
 
 
