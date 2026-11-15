@@ -12,3 +12,7 @@ tabla = mr.leer_rangos()
 
 errores = mr.crear_mapas("SA", "Layout", "Categorías", variables=["N"], rangos=tabla, aprx=proyecto)
 errores
+
+m = proyecto.listMaps("Map")[0]
+for l in m.listLayers():
+    print(repr(l.name), [hex(ord(c)) for c in l.name if ord(c) > 127])
