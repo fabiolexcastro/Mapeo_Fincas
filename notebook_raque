@@ -1,0 +1,24 @@
+import sys, importlib, arcpy
+ROOT = r"C:\Users\chern\OneDrive\ALIA2\Proyectos\Banano\GIS_Automatizacion_Mapas"
+if ROOT not in sys.path:
+    sys.path.append(ROOT)
+mr = importlib.import_module("02_mapas_rcl")
+importlib.reload(mr)
+
+mr.FECHA, mr.FECHA_CORTA = "Octubre 2026", "Oct2026"
+proyecto = arcpy.mp.ArcGISProject("CURRENT")
+tabla = mr.leer_rangos()
+
+# 1. Prueba con una sola variable
+errores = mr.crear_mapas("Raq", "Layout", "Raquelita_rcl", variables=["N"], rangos=tabla, aprx=proyecto)
+errores
+
+# 2. Diagnóstico (solo si la prueba falla con "La capa ... no está en el mapa")
+m = proyecto.listMaps("Map")[0]
+for l in m.listLayers():
+    print(repr(l.name), [hex(ord(c)) for c in l.name if ord(c) > 127])
+
+# 3. Todas las variables de Raquelita
+errores = mr.crear_mapas("Raq", "Layout", "Raquelita_rcl", rangos=tabla, aprx=proyecto)
+print(errores)
+print('Done')
