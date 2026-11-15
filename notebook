@@ -16,3 +16,8 @@ errores
 m = proyecto.listMaps("Map")[0]
 for l in m.listLayers():
     print(repr(l.name), [hex(ord(c)) for c in l.name if ord(c) > 127])
+    
+    
+for h in mr.HACIENDAS:
+    mr.crear_mapas(*h, rangos=tabla, aprx=proyecto)
+print('Done')
