@@ -1,12 +1,14 @@
 
-import sys, importlib
-sys.path.append(r"C:\Users\chern\OneDrive\ALIA2\Proyectos\Banano\GIS_Automatizacion_Mapas")
-mr = importlib.import_module("02_mapas_rcl")   # el nombre empieza con número: no sirve "import 02_..."
+import sys, importlib, arcpy
+ROOT = r"C:\Users\chern\OneDrive\ALIA2\Proyectos\Banano\GIS_Automatizacion_Mapas"
+if ROOT not in sys.path:
+    sys.path.append(ROOT)
+mr = importlib.import_module("02_mapas_rcl")
 importlib.reload(mr)
 
 mr.FECHA, mr.FECHA_CORTA = "Octubre 2026", "Oct2026"
 proyecto = arcpy.mp.ArcGISProject("CURRENT")
 tabla = mr.leer_rangos()
 
-## Prueba con N:
-mr.crear_mapas("SA", "Layout", "Categorías", variables=["N"], rangos=tabla, aprx=proyecto)
+errores = mr.crear_mapas("SA", "Layout", "Categorías", variables=["N"], rangos=tabla, aprx=proyecto)
+errores
