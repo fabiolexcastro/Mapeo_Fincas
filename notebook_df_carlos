@@ -4,3 +4,8 @@ if ROOT not in sys.path:
     sys.path.append(ROOT)
 mr = importlib.import_module("02_mapas_rcl")
 importlib.reload(mr)
+
+mr.FECHA, mr.FECHA_CORTA = "Noviembre 2026", "Nov2026"   # fecha del muestreo de Delia Francia
+mr.SALIDA = os.path.join(ROOT, "maps")
+proyecto = arcpy.mp.ArcGISProject("CURRENT")
+tabla = mr.leer_rangos(os.path.join(ROOT, "Bdatos_DF_Automatizacion_v3.xlsx"))
