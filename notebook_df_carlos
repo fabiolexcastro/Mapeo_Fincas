@@ -1,0 +1,6 @@
+import os, sys, importlib, arcpy
+ROOT = r"C:\Users\chern\OneDrive\ALIA2\Proyectos\Banano\Clientes\FINCABENE_VincentDurin\Fertilizacion\DF_Nutricion_GIS\DF_Gis_Automatizacion"   # carpeta donde está 02_mapas_rcl.py en ESTE PC
+if ROOT not in sys.path:
+    sys.path.append(ROOT)
+mr = importlib.import_module("02_mapas_rcl")
+importlib.reload(mr)
