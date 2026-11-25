@@ -13,3 +13,7 @@ tabla = mr.leer_rangos(os.path.join(ROOT, "Bdatos_DF_Automatizacion_v3.xlsx"))
 
 errores = mr.crear_mapas("DF", "Layout", "DeliaFrancia_rcl", variables=["N"], rangos=tabla, aprx=proyecto)
 errores
+
+errores = mr.crear_mapas("DF", "Layout", "DeliaFrancia_rcl", rangos=tabla, aprx=proyecto)
+print(errores)
+print('Done')
