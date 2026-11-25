@@ -9,3 +9,7 @@ mr.FECHA, mr.FECHA_CORTA = "Noviembre 2026", "Nov2026"   # fecha del muestreo de
 mr.SALIDA = os.path.join(ROOT, "maps")
 proyecto = arcpy.mp.ArcGISProject("CURRENT")
 tabla = mr.leer_rangos(os.path.join(ROOT, "Bdatos_DF_Automatizacion_v3.xlsx"))
+
+
+errores = mr.crear_mapas("DF", "Layout", "DeliaFrancia_rcl", variables=["N"], rangos=tabla, aprx=proyecto)
+errores
